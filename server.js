@@ -1,3 +1,4 @@
+require('./config/db');
 const app = require('./config/app');
 
 const port = 3000
