@@ -18,7 +18,7 @@ exports.register = async(req, res) => {
     const token = jwt.sign(
       { id: user._id, username: user.username, email: user.email }, 
       JWT_SECRET,
-      {expiresIn: '1hr'},
+      {expiresIn: '1h'},
     )
     res.status(200).json({
       user: {
@@ -32,4 +32,34 @@ exports.register = async(req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
+}
+
+exports.login = async(req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    const user = await UserModel.userExists(username);
+    if(!user) return res.status(404).json({ error: "User not found" });
+
+    const passwordValid = await bcrypt.compare(password, user.password);
+    if(!passwordValid) return res.status(401).json({ error: "Invalid password" });
+
+    const token = jwt.sign(
+      { id: user._id, username: user.username, email: user.email }, 
+      JWT_SECRET,
+      {expiresIn: '1h'},
+    )
+    res.status(200).json({
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      } ,
+      token: token,
+      message: "Login successful"
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+  
 }
