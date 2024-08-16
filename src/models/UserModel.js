@@ -6,22 +6,24 @@ const UserSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   username: { type: String, required: true },
   password: { type: String, required: true },
-})
+}, {
+  versionKey: false,
+});
 
 const UserModel = mongoose.model('User', UserSchema);
 
 class User {
   static async userExists(username) {
     const user = await UserModel.findOne({ username: username});
-    return user ? { error: "Username already registered." } : null;
+    return user;
   }
 
   static async register(body) {
-    const userExists = await this.userExists(body.username);
-    if(userExists) return { error: userExists.error };   
+    const user = await this.userExists(body.username);
+    if(user) return { error: "Username already registered." };   
 
-    const user = await UserModel.create(body);
-    return user;
+    const userCreated = await UserModel.create(body);
+    return userCreated;
   }
 
 }
