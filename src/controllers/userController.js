@@ -1,4 +1,4 @@
-const UserModel = require('../models/UserModel');
+const UserService = require('../services/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -11,7 +11,7 @@ exports.register = async(req, res) => {
     const salt = await bcrypt.genSalt(10);
     const encriptPassword = await bcrypt.hash(password, salt);
 
-    const user = await UserModel.register({ ...userData, password: encriptPassword }); 
+    const user = await UserService.register({ ...userData, password: encriptPassword }); 
 
     if(user.error) return res.status(400).json({ error: user.error });
 
@@ -38,7 +38,7 @@ exports.login = async(req, res) => {
   try {
     const { username, password } = req.body;
 
-    const user = await UserModel.userExists(username);
+    const user = await UserService.userExists(username);
     if(!user) return res.status(404).json({ error: "User not found" });
 
     const passwordValid = await bcrypt.compare(password, user.password);
