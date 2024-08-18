@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const AuthorSchema = new Schema({
   name: { type: String, required: true },
-  nacionatily: { type: String },
+  nacionality: { type: String },
   biography: { type: String },
   books: [{type: Schema.Types.ObjectId, ref: 'Book'}]
 });
