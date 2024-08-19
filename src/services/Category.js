@@ -6,6 +6,11 @@ class Category {
     return category;
   }
 
+  static async getAll() {
+    const categories = await CategoryModel.find({});
+    return categories;
+  }
+
   static async register(body) {
     const category = await Category.categoryExists(body.name);
     if(category) return { error: 'Category alredy registered.' };

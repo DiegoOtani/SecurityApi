@@ -1,5 +1,14 @@
 const CategoryService = require('../services/Category');
 
+module.exports.getAll = async(req, res) => {
+  try {
+    const categories = await CategoryService.getAll();
+    res.status(200).json({ categories });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
 module.exports.register = async(req, res) => {
   try {
     const category = await CategoryService.register(req.body);
