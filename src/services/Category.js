@@ -13,7 +13,7 @@ class Category {
 
   static async register(body) {
     const category = await Category.categoryExists(body.name);
-    if(category) return { error: 'Category alredy registered.' };
+    if(category) return { error: 'Category already registered.' };
 
     const categoryCreated = await CategoryModel.create(body);
     return categoryCreated;
