@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { register } = require('../controllers/category');
-const { categoryInfo, validate } = require('../middlewares/Category');
+const { register, edit, deleteCategory } = require('../controllers/category');
+const { categoryInfo, categoryId, validate } = require('../middlewares/Category');
 
-router.post('/register', categoryInfo(), validate, register);
+router.post('/', categoryInfo(), validate, register);
+router.put('/',categoryId(), categoryInfo(), validate, edit);
+router.delete('/', categoryId(), validate, deleteCategory);
 
 module.exports = router;

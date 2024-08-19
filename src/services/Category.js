@@ -13,6 +13,16 @@ class Category {
     const categoryCreated = await CategoryModel.create(body);
     return categoryCreated;
   }
+
+  static async edit( categoryId, data) {
+    const category = await CategoryModel.findByIdAndUpdate(categoryId, data, { new: true });
+    return !category ? { error: 'Category not found' } : category;
+  }
+
+  static async delete(categoryId) {
+    const category = await CategoryModel.findByIdAndDelete(categoryId);
+    return !category ? { error: 'Category not found' } : category;
+  }
 }
 
 module.exports = Category;
