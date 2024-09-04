@@ -22,8 +22,9 @@ module.exports.register = async(req, res) => {
 
 module.exports.edit = async(req, res) => {
   try {
-    const { categoryId, ...data } = req.body;
-    const category = await CategoryService.edit(categoryId, data);
+    const { id } = req.params;
+    const {...data } = req.body;
+    const category = await CategoryService.edit(id, data);
     category.error
       ? res.status(400).json({ error: category.error })
       : res.status(200).json({ category, message: "Category updated successfully" });
@@ -34,8 +35,8 @@ module.exports.edit = async(req, res) => {
 
 module.exports.deleteCategory = async(req, res) => {
   try {
-    const { categoryId } = req.body;
-    const category = await CategoryService.delete(categoryId);
+    const { id } = req.params;
+    const category = await CategoryService.delete(id);  
     category.error 
       ? res.status(400).json({ error: category.error })
       : res.status(200).json({ category, message: "Category deleted successfully" });
