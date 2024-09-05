@@ -19,6 +19,13 @@ class User {
     return userCreated;
   };
 
+  static async edit(id, body) {
+    const userUpdated = await UserModel.findByIdAndUpdate(id, body);
+    return !userUpdated 
+      ? { error: 'User not found' }
+      : { user: userUpdated };
+  };
+
   static async createAdmin(body) {
     const user = await this.userExists(body.username);
     if(user) return { error: 'Username already registered' };
