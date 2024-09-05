@@ -67,6 +67,25 @@ class Book {
 
     return updatedBook;
   };
+
+  static async delete(id) {
+    const book = await BookModel.findById(id);
+
+    if(!book) return { error: "Book not found!" };
+
+    await CategoryModel.updateMany(
+      { _id: { $in: book.categories }},
+      { $pull: { books: id }}
+    );
+
+    await AuthorModel.updateOne(
+      { _id: book.author },
+      { $pull: { books: id }}
+    );
+
+    const deletedBook = await BookModel.findByIdAndDelete(id);
+    return deletedBook;
+  };
 };
 
 module.exports = Book;
