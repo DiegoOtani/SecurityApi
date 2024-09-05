@@ -29,6 +29,44 @@ class Book {
     );
     return newBook;
   };
+
+  static async update(id, body) {
+    const existBook = await BookModel.findById(id);
+
+    if(!existBook) return { error: 'Book not found!' };
+
+    const updatedBook = await BookModel.findByIdAndUpdate(id, body, { new: true });
+    
+    if(body.categories) {
+      //Remove books from old categories
+      await CategoryModel.updateMany(
+        { _id: { $in: existBook.categories } },
+        { $pull: { books: id } }
+      );
+
+      //Add book on new categories
+      await CategoryModel.updateMany(
+        { _id: { $in: body.categories }},
+        { $push: { books: id }}
+      );
+    };
+
+    if (body.author) {
+      // Remove book from old author
+      await AuthorModel.updateOne(
+        { _id: existBook.author },
+        { $pull: { books: id }}
+      );
+      
+      // Add book on new author
+      await AuthorModel.updateOne(
+        { _id: body.author },
+        { $push: { books: id }}
+      );
+    };
+
+    return updatedBook;
+  };
 };
 
 module.exports = Book;
