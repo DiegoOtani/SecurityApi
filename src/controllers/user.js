@@ -76,6 +76,18 @@ module.exports.updateUser = async(req, res) => {
   }
 };
 
+module.exports.deleteUser = async(req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await UserService.deleteUser(id);
+    return user.error
+      ? res.status(400).json({ error: user.error })
+      : res.status(200).json({ user, message: 'User deleted successfully!' });
+  } catch (error) {
+    res.status(500).json({ error: `Internal Server Error ${error}` });
+  }
+};
+
 module.exports.createAdmin = async(req, res) => {
   try {
     const { username, password, ...userData } = req.body;

@@ -20,10 +20,19 @@ class User {
   };
 
   static async edit(id, body) {
+    const user = await UserModel.findById(id);
+    if(!user) return { error: "User not found" };   
+
     const userUpdated = await UserModel.findByIdAndUpdate(id, body);
-    return !userUpdated 
-      ? { error: 'User not found' }
-      : { user: userUpdated };
+    return userUpdated;
+  };
+
+  static async deleteUser(id) {
+    const user = await UserModel.findById(id);
+    if(!user) return { error: "User not found" };   
+
+    const userDeleted = await UserModel.findByIdAndDelete(id);
+    return userDeleted;
   };
 
   static async createAdmin(body) {
