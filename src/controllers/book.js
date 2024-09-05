@@ -16,6 +16,6 @@ module.exports.create = async(req, res) => {
       ? res.status(400).json({ error: book.error })
       : res.status(200).json({ book, message: "Book created successfully!" });
   } catch (error) {
-    res.status(500).json({ error: `Interal Server Error ${error}`, });
+    res.status(500).json({ error: 'Interal Server Error' });
   };
 };
