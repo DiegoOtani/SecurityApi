@@ -3,14 +3,14 @@ const { body, validationResult } = require('express-validator');
 class BookValidation {
   static bookInfo = () => {
     return [
-      body('title').isEmpty().withMessage('Title is required'),
-      body('title').isString().withMessage('Title must be a string'),
-      body('author').notEmpty().withMessage('Author is required'),
-      body('author').isMongoId().withMessage('Author must be a valid Id'),
-      body('publicationDate').optional().isISO8601().withMessage('Publication Date must be a valid date'),
-      body('summary').optional().isString().withMessage('Summary must be a string'),
+      body('title').notEmpty().withMessage('title is required'),
+      body('title').isString().withMessage('title must be a string'),
+      body('author').notEmpty().withMessage('author is required'),
+      body('author').isMongoId().withMessage('author must be a valid Id'),
+      body('publicationDate').optional().isISO8601().withMessage('publicationDate must be a valid date'),
+      body('summary').optional().isString().withMessage('summary must be a string'),
       body('categories').notEmpty().withMessage('At least one category is required'),
-      body('categories').isArray().withMessage('Categories must be an array'),
+      body('categories').isArray().withMessage('categories must be an array'),
       body('categories.*').isMongoId().withMessage('Each category must be a valid Id')
     ]
   }
