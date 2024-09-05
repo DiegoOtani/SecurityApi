@@ -11,13 +11,6 @@ class CategoryValidation {
     ];
   };
 
-  static categoryId = () => {
-    return [
-      body('categoryId').notEmpty().withMessage('categoryId is required'),
-      body('categoryId').isMongoId().withMessage('categoryId must be a valid Id'),
-    ];
-  };
-
   static validate = (req, res, next) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({ errors: errors.array().map(erro => erro.msg) });
