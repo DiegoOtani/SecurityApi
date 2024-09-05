@@ -15,6 +15,16 @@ class Author {
     const author = await Author.authorExists(body.name, body.nacionality);
     return author ? { error: 'Author already registered' } : await AuthorModel.create(body);
   }
+
+  static async edit(authorId, data) {
+    const author = await AuthorModel.findByIdAndUpdate(authorId, data, { new: true });
+    return author ? author : { error: 'Author not found' };
+  }
+
+  static async delete(authorId) {
+    const author = await AuthorModel.findByIdAndDelete(authorId);
+    return author ? author : { error: 'Author not found' };
+  }
 }
 
 module.exports = Author;
