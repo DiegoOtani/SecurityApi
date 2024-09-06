@@ -27,10 +27,12 @@ class Recommenndation {
 
     const readCategories = user.books.flatMap(book => book.categories);
 
-    const categoriesObjectIds = readCategories.map(id => new mongoose.Types.ObjectId(id));
+    const categoriesObjectIds = readCategories.map(id => mongoose.Types.ObjectId.isValid(id) ? new mongoose.Types.ObjectId(id) : null);
+
+    const validCategoriesObjectIds = categoriesObjectIds.filter(id => id !== null);
 
     const recommendedBooks = await BookModel.aggregate([
-      { $match: { categories: { $in: categoriesObjectIds } } },
+      { $match: { categories: { $in: validCategoriesObjectIds } } },
     
       { $sample: { size: 5 } },
     
