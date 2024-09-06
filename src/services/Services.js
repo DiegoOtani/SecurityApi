@@ -1,5 +1,6 @@
 const UserModel = require('../models/UserModel');
 const BookModel = require('../models/BookModel');
+const mongoose = require('mongoose');
 
 class Recommenndation {
   static async addBookToUser(userId, bookId) {
@@ -15,6 +16,41 @@ class Recommenndation {
     await user.save();
     
     return user;
+  };
+
+  static async getRecommendations(userId) {
+    const user = await UserModel.findById(userId).populate({
+      path: 'books',
+      select: 'categories',
+    });
+    if(!user) return { error: 'User not found' };
+
+    const readCategories = user.books.flatMap(book => book.categories);
+
+    const categoriesObjectIds = readCategories.map(id => new mongoose.Types.ObjectId(id));
+
+    const recommendedBooks = await BookModel.aggregate([
+      { $match: { categories: { $in: categoriesObjectIds } } },
+    
+      { $sample: { size: 5 } },
+    
+      { $lookup: {
+        from: 'authors',
+        localField: 'author',
+        foreignField: '_id',
+        as: 'author'
+      } },
+    
+      { $unwind: '$author' },
+    
+      { $project: {
+        title: 1, 
+        publicationDate: 1,
+        summary: 1,
+        'author.name': 1 
+      } }
+    ]);
+    return recommendedBooks;
   };
 };
 
