@@ -7,8 +7,17 @@ class Book {
     return await BookModel.findOne({ title, author: authorId });
   };
 
-  static async getAll() {
-    return await BookModel.find().populate('author').populate('categories');
+  static async getAll(limit, page) {
+    const validLimits = [5, 10, 30];
+    if(!validLimits.includes(limit)) return { error: 'Invalid limit' };
+
+    const skip = (page - 1) * limit;
+
+    const books = await BookModel.find().populate('author').populate('categories').skip(skip).limit(limit);
+
+    const totalBooks = await BookModel.countDocuments({});
+
+    return { books, totalBooks };
   };
 
   static async create(body) {
