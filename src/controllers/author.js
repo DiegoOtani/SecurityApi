@@ -5,9 +5,9 @@ module.exports.getAll = async(req, res) => {
     const limit = parseInt(req.query.limit) || 5;
     const page = parseInt(req.query.page) || 1;
     const { authors, totalAuthors } = await AuthorService.getAll(limit, page);
-    res.status(200).json({ authors, totalPages: Math.ceil(totalAuthors / limit), currentPage: page, totalAuthors });
+    return res.status(200).json({ authors, totalPages: Math.ceil(totalAuthors / limit), currentPage: page, totalAuthors });
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error' });
   };
 };
 
