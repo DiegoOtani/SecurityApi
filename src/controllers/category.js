@@ -2,8 +2,10 @@ const CategoryService = require('../services/Category');
 
 module.exports.getAll = async(req, res) => {
   try {
-    const categories = await CategoryService.getAll();
-    res.status(200).json({ categories });
+    const limit = parseInt(req.query.limit) || 5;
+    const page = parseInt(req.query.page) || 1;
+    const { categories, totalCategories } = await CategoryService.getAll(limit, page);
+    res.status(200).json({ categories, totalPages: Math.ceil(totalCategories / limit), currentPage: page, totalCategories });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }

@@ -2,8 +2,10 @@ const BookService = require('../services/Book');
 
 module.exports.getAll = async(req, res) => {
   try {
-    const books = await BookService.getAll();
-    res.status(200).json( books );
+    const limit = parseInt(req.query.limit) || 5;
+    const page = parseInt(req.query.page) || 1;
+    const { books, totalBooks } = await BookService.getAll(limit, page);
+    return res.status(200).json({ books, totalPages: Math.ceil(totalBooks / limit), currentPage: page, totalBooks });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   };
