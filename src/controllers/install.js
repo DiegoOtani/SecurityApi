@@ -2,16 +2,19 @@ const UserModel = require('../models/UserModel');
 const BookModel = require('../models/BookModel');
 const CategoryModel = require('../models/CategoryModel');
 const AuthorModel = require('../models/AuthorModel');
+const bcrypt = require('bcrypt');
 
 const installDatabase = async (req, res) => {
+  const salt = 10;
   try {
+    const encriptedPassword = await bcrypt.hash('password', salt);
     // Criate users
     await UserModel.create([
-      { name: 'Admin User', email: 'admin@example.com', phone: '1234567890', username: 'adminuser', password: 'password', isAdmin: true },
-      { name: 'User One', email: 'user1@example.com', phone: '2345678901', username: 'userone', password: 'password' },
-      { name: 'User Two', email: 'user2@example.com', phone: '3456789012', username: 'usertwo', password: 'password' },
-      { name: 'User Three', email: 'user3@example.com', phone: '4567890123', username: 'userthree', password: 'password' },
-      { name: 'User Four', email: 'user4@example.com', phone: '5678901234', username: 'userfour', password: 'password' }
+      { name: 'Admin User', email: 'admin@example.com', phone: '1234567890', username: 'adminuser', password: encriptedPassword, isAdmin: true },
+      { name: 'User One', email: 'user1@example.com', phone: '2345678901', username: 'userone', password: encriptedPassword },
+      { name: 'User Two', email: 'user2@example.com', phone: '3456789012', username: 'usertwo', password: encriptedPassword },
+      { name: 'User Three', email: 'user3@example.com', phone: '4567890123', username: 'userthree', password: encriptedPassword },
+      { name: 'User Four', email: 'user4@example.com', phone: '5678901234', username: 'userfour', password: encriptedPassword }
     ]);
 
     // Create authors
