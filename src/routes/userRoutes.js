@@ -1,10 +1,11 @@
 const express = require('express');
 const { completeUser, loginUser, validate} = require('../middlewares/User');
-const { register, login, createAdmin , updateUser, deleteUser} = require('../controllers/user');
+const { register, login, createAdmin , updateUser, deleteUser, getAllUsers} = require('../controllers/user');
 const { authMiddleware, adminMiddleware, verifyUserId, securityAdminInfo } = require('../middlewares/auth')
 
 const router = express.Router();
 
+router.get('/', authMiddleware, adminMiddleware, getAllUsers);
 router.post('/register', completeUser(), validate, securityAdminInfo, register);
 router.post('/login', loginUser(), validate, login);
 router.put('/myProfile/:id', authMiddleware, verifyUserId, securityAdminInfo, updateUser);

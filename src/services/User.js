@@ -19,6 +19,10 @@ class User {
     return userCreated;
   };
 
+  static async get() {
+    return await UserModel.find({});
+  };
+
   static async edit(id, body) {
     const user = await UserModel.findById(id);
     if(!user) return { error: "User not found" };   
