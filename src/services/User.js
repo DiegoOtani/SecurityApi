@@ -32,7 +32,7 @@ class User {
     const user = await UserModel.findById(id);
     if(!user) return { error: "User not found" };   
 
-    const userUpdated = await UserModel.findByIdAndUpdate(id, body);
+    const userUpdated = await UserModel.findByIdAndUpdate(id, body, { new: true });
     return userUpdated;
   };
 
