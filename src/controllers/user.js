@@ -1,6 +1,7 @@
 const UserService = require('../services/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 const JWT_SECRET = process.env.JWT_SECRET
 
@@ -67,6 +68,20 @@ module.exports.getAllUsers = async(req, res) => {
   try {
     const users = await UserService.get();
     res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+module.exports.getUserById = async(req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).json({ error: 'Invalid ID format' });
+
+    const user = await UserService.getById(id);
+    return user.error
+      ? res.status(400).json({ error: user.error })
+      : res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
