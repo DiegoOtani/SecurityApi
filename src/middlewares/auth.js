@@ -26,4 +26,17 @@ const adminMiddleware = (req, res, next) => {
   next();
 };
 
-module.exports = { authMiddleware, adminMiddleware };
+const verifyUserId = (req, res, next) => {
+  const paramsId = req.params.id;
+  const userId = req.user.id;
+
+  if(userId !== paramsId) return res.status(403).json({ error: "Access denied. You can only access or modify your own data." });
+  next();
+};
+
+const securityAdminInfo = (req, res, next) => {
+  if(req.body.isAdmin !== undefined) delete req.body.isAdmin;
+  next();
+};
+
+module.exports = { authMiddleware, adminMiddleware, verifyUserId, securityAdminInfo };
