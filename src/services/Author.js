@@ -19,6 +19,11 @@ class Author {
     return { authors, totalAuthors };
   };
 
+  static async getById(id) {
+    const author = await AuthorModel.findById(id);
+    return !author ? { error: 'Author not found' } : author;
+  };
+
   static async create(body) {
     const author = await Author.authorExists(body.name, body.nacionality);
     return author ? { error: 'Author already registered' } : await AuthorModel.create(body);

@@ -39,4 +39,18 @@ const securityAdminInfo = (req, res, next) => {
   next();
 };
 
-module.exports = { authMiddleware, adminMiddleware, verifyUserId, securityAdminInfo };
+const checkAdminModification = async (req, res, next) => {
+  try {
+    const paramsId = req.params.id;
+
+    const userToModify = await UserModel.findById(paramsId);
+
+    userToModify && userToModify.isAdmin 
+      ? res.status(403).json({ error: "Access denied. You cannot modify admin users." })
+      : next();
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+module.exports = { authMiddleware, adminMiddleware, verifyUserId, securityAdminInfo, checkAdminModification };

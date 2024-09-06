@@ -20,6 +20,11 @@ class Book {
     return { books, totalBooks };
   };
 
+  static async getById(id) {
+    const book = await BookModel.findById(id).populate('author').populate('categories');
+    return !book ? { error: 'Book not found' } : book;
+  };
+
   static async create(body) {
     const book = await Book.bookExists(body.title, body.author);
 

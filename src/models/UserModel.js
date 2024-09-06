@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
   isAdmin: { type: Boolean, default: false },
+  books: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book', default: [] }],
 }, {
   versionKey: false,
 });
