@@ -24,13 +24,15 @@ const installDatabase = async (req, res) => {
     ]);
 
     // Criate categories
-    const categoryIds = await CategoryModel.create([
+    await CategoryModel.create([
       { name: 'Fiction', description: 'Fiction books' },
       { name: 'Non-Fiction', description: 'Non-Fiction books' },
       { name: 'Science Fiction', description: 'Science Fiction books' },
       { name: 'Fantasy', description: 'Fantasy books' },
       { name: 'Biography', description: 'Biography books' }
-    ]).then(categories => categories.map(cat => cat._id));
+    ]);
+
+    const categoryIds = await CategoryModel.find().then(categories => categories.map(category => category._id));
 
     const authorIds = await AuthorModel.find().then(authors => authors.map(author => author._id));
 
