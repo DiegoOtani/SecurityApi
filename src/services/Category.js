@@ -6,14 +6,22 @@ class Category {
     return category;
   }
 
-  static async getAll() {
-    const categories = await CategoryModel.find({});
-    return categories;
+  static async getAll(limit, page) {
+    const validLimits = [5, 10, 30];
+    if(!validLimits.includes(limit)) return { error: 'Invalid limit' };
+    
+    const skip = (page - 1) * limit;
+
+    const categories = await CategoryModel.find({}).skip(skip).limit(limit);
+
+    const totalCategories = await CategoryModel.countDocuments({});
+
+    return { categories, totalCategories };
   }
 
   static async register(body) {
     const category = await Category.categoryExists(body.name);
-    if(category) return { error: 'Category alredy registered.' };
+    if(category) return { error: 'Category already registered.' };
 
     const categoryCreated = await CategoryModel.create(body);
     return categoryCreated;

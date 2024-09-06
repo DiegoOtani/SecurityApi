@@ -19,4 +19,4 @@ class AuthorValidation {
   }
 }
 
-module.exports - AuthorValidation;
+module.exports = AuthorValidation;

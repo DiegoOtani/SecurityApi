@@ -3,9 +3,12 @@ require('dotenv').config();
 
 const connectionString = process.env.MONGO_URL;
 
+const UserController = require('../src/controllers/user');
+
 mongoose.connect(connectionString);
 
 mongoose.connection.on('connected', () => {
+  UserController.initializeDefaultAdmin();
   console.log('Conectado ao MongoDB Atlas');
 });
 
