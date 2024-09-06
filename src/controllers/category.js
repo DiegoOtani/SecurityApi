@@ -49,7 +49,7 @@ module.exports.edit = async(req, res) => {
       : res.status(200).json({ category, message: "Category updated successfully" });
   } catch (error) {
     if (error.code === 11000) return res.status(400).json({ error: 'A category with this name already exists.' });
-    res.status(500).json({ error: `Internal Server Error ${error}` });
+    res.status(500).json({ error: `Internal Server Error` });
   };
 };
 
