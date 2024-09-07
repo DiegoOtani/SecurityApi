@@ -1,0 +1,1365 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Projeto Biblioteca",
+    "version": "1.0.0",
+    "description": "Documentação da API Projeto Biblioteca"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor de Desenvolvimento"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/author": {
+      "get": {
+        "summary": "Retrieve all authors.",
+        "description": "Returns a list of all authors registered in the system.",
+        "tags": [
+          "Authors"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of authors.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "authors": [
+                    {
+                      "_id": "66db69742b948490e33f4019",
+                      "name": "Author One",
+                      "nationality": "Country A",
+                      "biography": "Biography of Author One",
+                      "books": []
+                    }
+                  ],
+                  "totalPages": 5,
+                  "currentPage": 1,
+                  "totalAuthors": 10
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new author.",
+        "description": "Creates a new author in the system. A valid Bearer Token is required for authentication.",
+        "tags": [
+          "Authors"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Rick Riordan"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Author created successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "author": {
+                    "_id": "66db69742b948490e33f4020",
+                    "name": "Rick Riordan",
+                    "nationality": "",
+                    "biography": "",
+                    "books": []
+                  },
+                  "message": "Author created successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid data"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. Invalid or missing Bearer Token.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/author/{id}": {
+      "get": {
+        "summary": "Retrieve an author by ID.",
+        "description": "Returns the details of a specific author by their ID.",
+        "tags": [
+          "Authors"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the author to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of an author.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "_id": "66db69742b948490e33f4019",
+                  "name": "Author One",
+                  "nationality": "Country A",
+                  "biography": "Biography of Author One",
+                  "books": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID format."
+          },
+          "404": {
+            "description": "Author not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing author.",
+        "description": "Updates the details of an existing author by their ID. A valid Bearer Token is required for authentication.",
+        "tags": [
+          "Authors"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the author to update.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Rick Riordan"
+                  },
+                  "nationality": {
+                    "type": "string",
+                    "example": "American"
+                  },
+                  "biography": {
+                    "type": "string",
+                    "example": "Author of the Percy Jackson series."
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Author updated successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "author": {
+                    "_id": "66db69742b948490e33f4020",
+                    "name": "Rick Riordan",
+                    "nationality": "American",
+                    "biography": "Author of the Percy Jackson series.",
+                    "books": []
+                  },
+                  "message": "Author updated successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID format or input data.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid ID format"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an existing author.",
+        "description": "Deletes an existing author by their ID. A valid Bearer Token is required for authentication.",
+        "tags": [
+          "Authors"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the author to delete.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Author deleted successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "author": {
+                    "_id": "66db69742b948490e33f4020",
+                    "name": "Rick Riordan",
+                    "nationality": "American",
+                    "biography": "Author of the Percy Jackson series.",
+                    "books": []
+                  },
+                  "message": "Author deleted successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID format.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid ID format"
+                }
+              }
+            }
+          },
+          "440": {
+            "description": "Error deleting author.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Error deleting author"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/book": {
+      "get": {
+        "summary": "Retrieve all books.",
+        "description": "Returns a list of all books registered in the system.",
+        "tags": [
+          "Books"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "example": 5
+            },
+            "description": "Number of books per page."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "description": "Page number."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of books.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "books": [
+                    {
+                      "_id": "60d21bbf7c7c280f0d5f5b76",
+                      "title": "Dune",
+                      "publicationDate": "1965-08-01T00:00:00.000Z",
+                      "summary": "A science fiction novel set in a distant future.",
+                      "author": "60d21bbf7c7c280f0d5f5b77",
+                      "categories": [
+                        "60d21bbf7c7c280f0d5f5b78"
+                      ]
+                    }
+                  ],
+                  "totalPages": 10,
+                  "currentPage": 1,
+                  "totalBooks": 50
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new book.",
+        "description": "Creates a new book in the system. A valid Bearer Token is required for authentication.",
+        "tags": [
+          "Books"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "Dune"
+                  },
+                  "publicationDate": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "1965-08-01"
+                  },
+                  "summary": {
+                    "type": "string",
+                    "example": "A science fiction novel set in a distant future."
+                  },
+                  "author": {
+                    "type": "string",
+                    "example": "60d21bbf7c7c280f0d5f5b77"
+                  },
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "60d21bbf7c7c280f0d5f5b78"
+                    }
+                  }
+                },
+                "required": [
+                  "title",
+                  "author",
+                  "categories"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Book created successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "book": {
+                    "_id": "60d21bbf7c7c280f0d5f5b76",
+                    "title": "Dune",
+                    "publicationDate": "1965-08-01T00:00:00.000Z",
+                    "summary": "A science fiction novel set in a distant future.",
+                    "author": "60d21bbf7c7c280f0d5f5b77",
+                    "categories": [
+                      "60d21bbf7c7c280f0d5f5b78"
+                    ]
+                  },
+                  "message": "Book created successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid data"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. Invalid or missing Bearer Token.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/book/{id}": {
+      "get": {
+        "summary": "Retrieve a book by ID.",
+        "description": "Returns the details of a specific book by its ID.",
+        "tags": [
+          "Books"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the book to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of a book.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "_id": "60d21bbf7c7c280f0d5f5b76",
+                  "title": "Dune",
+                  "publicationDate": "1965-08-01T00:00:00.000Z",
+                  "summary": "A science fiction novel set in a distant future.",
+                  "author": "60d21bbf7c7c280f0d5f5b77",
+                  "categories": [
+                    "60d21bbf7c7c280f0d5f5b78"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID format.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid ID format"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Book not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Book not found"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing book.",
+        "description": "Updates the details of an existing book by its ID. A valid Bearer Token is required for authentication.",
+        "tags": [
+          "Books"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the book to update.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "Dune"
+                  },
+                  "publicationDate": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "1965-08-01"
+                  },
+                  "summary": {
+                    "type": "string",
+                    "example": "A science fiction novel set in a distant future."
+                  },
+                  "author": {
+                    "type": "string",
+                    "example": "60d21bbf7c7c280f0d5f5b77"
+                  },
+                  "categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "60d21bbf7c7c280f0d5f5b78"
+                    }
+                  }
+                },
+                "required": [
+                  "title",
+                  "author",
+                  "categories"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Book updated successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "book": {
+                    "_id": "60d21bbf7c7c280f0d5f5b76",
+                    "title": "Dune",
+                    "publicationDate": "1965-08-01T00:00:00.000Z",
+                    "summary": "A science fiction novel set in a distant future.",
+                    "author": "60d21bbf7c7c280f0d5f5b77",
+                    "categories": [
+                      "60d21bbf7c7c280f0d5f5b78"
+                    ]
+                  },
+                  "message": "Book updated successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID format or input data.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid ID format"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an existing book.",
+        "description": "Deletes an existing book by its ID. A valid Bearer Token is required for authentication.",
+        "tags": [
+          "Books"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the book to delete.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book deleted successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Book deleted successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID format.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid ID format"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Book not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Book not found"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/category": {
+      "get": {
+        "summary": "Retrieve all categories.",
+        "description": "Returns a list of all categories registered in the system.",
+        "tags": [
+          "Categories"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "example": 5
+            },
+            "description": "Number of categories per page."
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "description": "Page number."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of categories.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "categories": [
+                    {
+                      "_id": "60d21bbf7c7c280f0d5f5b75",
+                      "name": "Fiction",
+                      "description": "Fictional books and stories."
+                    }
+                  ],
+                  "totalPages": 10,
+                  "currentPage": 1,
+                  "totalCategories": 50
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new category.",
+        "description": "Creates a new category in the system. A valid Bearer Token is required for authentication.",
+        "tags": [
+          "Categories"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Science Fiction"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Books that explore futuristic concepts."
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Category created successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "category": {
+                    "_id": "60d21bbf7c7c280f0d5f5b76",
+                    "name": "Science Fiction",
+                    "description": "Books that explore futuristic concepts."
+                  },
+                  "message": "Category registered successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid data"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. Invalid or missing Bearer Token.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/category/{id}": {
+      "get": {
+        "summary": "Retrieve a category by ID.",
+        "description": "Returns the details of a specific category by its ID.",
+        "tags": [
+          "Categories"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the category to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Details of a category.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "_id": "60d21bbf7c7c280f0d5f5b75",
+                  "name": "Fiction",
+                  "description": "Fictional books and stories."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID format.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid ID format"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Category not found"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing category.",
+        "description": "Updates the details of an existing category by its ID. A valid Bearer Token is required for authentication.",
+        "tags": [
+          "Categories"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the category to update.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Science Fiction"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Books that explore futuristic concepts."
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Category updated successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "category": {
+                    "_id": "60d21bbf7c7c280f0d5f5b76",
+                    "name": "Science Fiction",
+                    "description": "Books that explore futuristic concepts."
+                  },
+                  "message": "Category updated successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID format or input data.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid ID format"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an existing category.",
+        "description": "Deletes an existing category by its ID. A valid Bearer Token is required for authentication.",
+        "tags": [
+          "Categories"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "ID of the category to delete.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category deleted successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "category": {
+                    "_id": "60d21bbf7c7c280f0d5f5b76",
+                    "name": "Science Fiction",
+                    "description": "Books that explore futuristic concepts."
+                  },
+                  "message": "Category deleted successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID format.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Invalid ID format"
+                }
+              }
+            }
+          },
+          "440": {
+            "description": "Error deleting category.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Error deleting category"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/install": {
+      "get": {
+        "summary": "Initialize the database with sample data.",
+        "description": "This endpoint initializes the database with sample data including users, authors, categories, and books. This is typically used for setting up initial data in the development environment.",
+        "tags": [
+          "Installation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Database installation completed successfully.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Database installation completed successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Database already initialized.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Database already initialized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to install database.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "Failed to install database",
+                  "details": "Detailed error message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/register": {
+      "post": {
+        "summary": "Register a new user.",
+        "description": "Creates a new user with the provided data and returns a JWT token for authentication.",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "description": "Data for the user to be registered.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Diego",
+                    "description": "The full name of the user."
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "diego@gmail.com",
+                    "description": "The email address of the user."
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": "(15)94002-8922",
+                    "description": "The phone number of the user."
+                  },
+                  "username": {
+                    "type": "string",
+                    "example": "diegouser7",
+                    "description": "A unique username for login."
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": 123456,
+                    "description": "The user's password."
+                  }
+                },
+                "required": [
+                  "name",
+                  "email",
+                  "phone",
+                  "username",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully registered.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "66dba955d71a66828468a076",
+                          "description": "The unique ID of the user."
+                        },
+                        "username": {
+                          "type": "string",
+                          "example": "diegouser7",
+                          "description": "The username of the user."
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "diego@gmail.com",
+                          "description": "The email address of the user."
+                        }
+                      }
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGJhOTU1ZDcxYTY2ODI4NDY4YTA3NiIsInVzZXJuYW1lIjoiZGllZ291c2VyNyIsImVtYWlsIjoiZGllZ29AZ21haWwuY29tIiwiaWF0IjoxNzI1NjcxNzY1LCJleHAiOjE3MjU2NzUzNjV9.QJms3to7mq5dJztYLYHf68lPAQqCUHsw173gecH2LuM",
+                      "description": "JWT token for user authentication."
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User registered successfully",
+                      "description": "Confirmation message for the registration."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid data or missing required fields."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "security": [
+          {
+            "securityAdminInfo": []
+          }
+        ]
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Authenticate a user.",
+        "description": "Authenticates a user with the provided username and password and returns a JWT token for access.",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "description": "Credentials for user authentication.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "example": "userone",
+                    "description": "The username of the user."
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password",
+                    "description": "The user's password."
+                  }
+                },
+                "required": [
+                  "username",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "66db8412a0d3bdf443698795",
+                          "description": "The unique ID of the user."
+                        },
+                        "username": {
+                          "type": "string",
+                          "example": "userone",
+                          "description": "The username of the user."
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "user1@example.com",
+                          "description": "The email address of the user."
+                        }
+                      }
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZGI4NDEyYTBkM2JkZjQ0MzY5ODc5NSIsInVzZXJuYW1lIjoidXNlcm9uZSIsImVtYWlsIjoidXNlcjFAZXhhbXBsZS5jb20iLCJpYXQiOjE3MjU2Njg3MzUsImV4cCI6MTcyNTY3MjMzNX0.6Smpcp5PuUojOBzFjn_Gzr3mXot28mGW2dEr0hCR_BE",
+                      "description": "JWT token for user authentication."
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login successful",
+                      "description": "Confirmation message for a successful login."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid credentials or missing required fields."
+          },
+          "401": {
+            "description": "Unauthorized, invalid username or password."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "security": [
+          {
+            "securityAdminInfo": []
+          }
+        ]
+      }
+    }
+  },
+  "tags": []
+}
