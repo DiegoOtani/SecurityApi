@@ -1,4 +1,6 @@
 const AuthorModel = require('../models/AuthorModel');
+const CategoryModel = require('../models/CategoryModel');
+const BookModel = require('../models/BookModel');
 
 class Author {
   static async authorExists(name, nacionality) {
@@ -37,6 +39,22 @@ class Author {
   static async delete(authorId) {
     const author = await AuthorModel.findByIdAndDelete(authorId);
     return author ? author : { error: 'Author not found' };
+  };
+
+  static async getCategoriesByAuthor(authorId) {
+    const author = await AuthorModel.findById(authorId)
+    if(!author) return { error: 'Author not found' };
+
+    const books = await BookModel.find({ author: authorId });
+
+    const categories = books.map(book => book.categories);
+    const categoriesName = [];
+
+    for(let i = 0; i< categories.length; i++) {
+      const categoryReached = await CategoryModel.findById(categories[i]);
+      if(!categoriesName.includes(categoryReached.name)) categoriesName.push(categoryReached.name);
+    }
+    return categoriesName;
   };
 };
 

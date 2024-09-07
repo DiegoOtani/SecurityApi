@@ -68,3 +68,13 @@ module.exports.deleteAuthor = async(req, res) => {
     res.status(500).json({ error: `Internal Server Error, ${error}` });
   };
 };
+
+module.exports.getCategoriesByAuthor = async(req, res) => {
+  try {
+    const { id } = req.params;
+    const categories = await AuthorService.getCategoriesByAuthor(id);
+    return res.status(200).json({ categories: categories })
+  } catch (error) {
+    res.status(500).json({ error: `Erro: ${error}` });
+  };
+};

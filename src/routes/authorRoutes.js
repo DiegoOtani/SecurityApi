@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authorInfo, validate } = require('../middlewares/Author');
-const { getAll, create, edit, deleteAuthor, getAuthorById } = require('../controllers/author');
+const { getAll, create, edit, deleteAuthor, getAuthorById, getCategoriesByAuthor } = require('../controllers/author');
 const { authMiddleware } = require('../middlewares/auth');
 
 /**
@@ -239,5 +239,7 @@ router.put('/:id', authMiddleware, edit);
  */
 
 router.delete('/:id', authMiddleware, deleteAuthor);
+
+router.get('/categories/:id', getCategoriesByAuthor);
 
 module.exports = router;
