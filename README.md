@@ -54,6 +54,12 @@ Projeto de API desenvolvido pela disciplina de Backend
   npm run dev
 ```
 
+- Para gerar a documentação do swagger:
+
+```
+  npm run generate-docs
+```
+
 ## Author
 
 - Diego Otani
