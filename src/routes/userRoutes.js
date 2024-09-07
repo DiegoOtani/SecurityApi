@@ -13,7 +13,7 @@ const router = express.Router();
  *     summary: Register a new user.
  *     description: Creates a new user with the provided data and returns a JWT token for authentication.
  *     tags:
- *       - Users
+ *       - Login
  *     requestBody:
  *       description: Data for the user to be registered.
  *       content:
@@ -95,7 +95,7 @@ router.post('/register', completeUser(), validate, securityAdminInfo, register);
  *     summary: Authenticate a user.
  *     description: Authenticates a user with the provided username and password and returns a JWT token for access.
  *     tags:
- *       - Users
+ *       - Login
  *     requestBody:
  *       description: Credentials for user authentication.
  *       content:
@@ -157,16 +157,325 @@ router.post('/register', completeUser(), validate, securityAdminInfo, register);
 router.post('/login', loginUser(), validate, login);
 
 // User profile routes
+
+/**
+ * @swagger
+ * /users/myProfile/{id}:
+ *   get:
+ *     summary: Get a user by ID.
+ *     description: Retrieve a user by their unique ID.
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to retrieve.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: User found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *       '404':
+ *         description: User not found.
+ *       '401':
+ *         description: Unauthorized.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.get('/myProfile/:id', authMiddleware, verifyUserId, getUserById);
+
+/**
+ * @swagger
+ * /users/myProfile/{id}:
+ *   put:
+ *     summary: Update a user by ID.
+ *     description: Update the details of a user by their unique ID.
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to update.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       description: User data to update.
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             required:
+ *               - name
+ *               - email
+ *               - phone
+ *               - username
+ *               - password
+ *     responses:
+ *       '200':
+ *         description: User updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *       '400':
+ *         description: Bad request.
+ *       '404':
+ *         description: User not found.
+ *       '401':
+ *         description: Unauthorized.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.put('/myProfile/:id', authMiddleware, verifyUserId, securityAdminInfo, updateUser);
+
+/**
+ * @swagger
+ * /users/myProfile/{id}:
+ *   delete:
+ *     summary: Delete a user by ID.
+ *     description: Remove a user from the system by their unique ID.
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to delete.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: User deleted successfully.
+ *       '404':
+ *         description: User not found.
+ *       '401':
+ *         description: Unauthorized.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.delete('/myProfile/:id', authMiddleware, verifyUserId, deleteUser);
 
 // Admin routes
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Get a list of all users.
+ *     description: Retrieve a list of all users in the system.
+ *     tags:
+ *       - Users/Admin
+ *     responses:
+ *       '200':
+ *         description: A list of users.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   username:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *       '401':
+ *         description: Unauthorized.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.get('/', authMiddleware, adminMiddleware, getAllUsers);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Update a user by ID.
+ *     description: Update the details of a user by their unique ID.
+ *     tags:
+ *       - Users/Admin
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to update.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       description: User data to update.
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             required:
+ *               - name
+ *               - email
+ *               - phone
+ *               - username
+ *               - password
+ *     responses:
+ *       '200':
+ *         description: User updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *       '400':
+ *         description: Bad request.
+ *       '404':
+ *         description: User not found.
+ *       '401':
+ *         description: Unauthorized.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.put('/:id', authMiddleware, adminMiddleware, checkAdminModification, updateUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Delete a user by ID.
+ *     description: Remove a user from the system by their unique ID.
+ *     tags:
+ *       - Users/Admin
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the user to delete.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: User deleted successfully.
+ *       '404':
+ *         description: User not found.
+ *       '401':
+ *         description: Unauthorized.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.delete('/:id', authMiddleware, adminMiddleware, checkAdminModification, deleteUser);
 
 // Create admin route
+
+/**
+ * @swagger
+ * /users/admin:
+ *   post:
+ *     summary: Create a new admin user.
+ *     description: Create a new user with admin privileges.
+ *     tags:
+ *       - Users/Admin
+ *     requestBody:
+ *       description: Admin user data.
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             required:
+ *               - name
+ *               - email
+ *               - phone
+ *               - username
+ *               - password
+ *     responses:
+ *       '200':
+ *         description: Admin user created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     username:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                 token:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *       '400':
+ *         description: Bad request.
+ *       '401':
+ *         description: Unauthorized.
+ *       '500':
+ *         description: Internal server error.
+ */
+
 router.post('/admin', authMiddleware, adminMiddleware, createAdmin);
 
 module.exports = router;
